@@ -18,5 +18,3 @@
 
 **Запуск автотестов и создание allure-отчета о покрытии**
 - pytest tests --alluredir=allure_results
-> Формирование HTML страницы allure-отчета о покрытии
-- allure serve allure_results
