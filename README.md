@@ -17,6 +17,6 @@
 - requirements.txt - список необходимых для работы проекта библиотек и их версий.
 
 **Запуск автотестов и создание allure-отчета о покрытии**
-pytest tests --alluredir=allure_results
+- pytest tests --alluredir=allure_results
 > Формирование HTML страницы allure-отчета о покрытии
-allure serve allure_results
+- allure serve allure_results
