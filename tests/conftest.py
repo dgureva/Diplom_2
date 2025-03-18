@@ -6,17 +6,15 @@ from helpers import Helpers
 
 
 @pytest.fixture(scope='function')
-def helpers():
-    return Helpers()
-
-@pytest.fixture(scope='function')
-def get_token(helpers):
+def get_token():
+    helpers = Helpers()
     data = helpers.create_new_user_and_get_authentication_data()
+
     response = requests.post(Const.LOGIN_USER, data={
-        "email": data[0],
-        "password": data[1],
-        "name": data[2]
-    })
+            "email": data[0],
+            "password": data[1],
+            "name": data[2]
+        })
     token = response.json().get("accessToken")
 
     yield token

@@ -2,9 +2,10 @@ import allure
 import requests
 
 from const import Const, Ingredients, MessageText
+from helpers import Helpers
 
 
-class TestCreateOder():
+class TestCreateOrder:
 
     @allure.title('Проверка создания заказа с авторизацией')
     def test_create_order_with_authorization(self, get_token):
@@ -13,9 +14,13 @@ class TestCreateOder():
             "ingredients": [Ingredients.BUN, Ingredients.MEAT_PROTOSTOMIA, Ingredients.SPICY_SAUSE]
         }
         headers = {"Content-type": "application/json", "Authorization": f'{token}'}
-        response = requests.post(Const.CREATE_ORDER, headers=headers, json=payload)
-        assert response.status_code == 200
-        assert MessageText.CREATE_ORDER in response.text
+
+        with allure.step("Отправка POST-запроса с авторизацией"):
+            response = requests.post(Const.CREATE_ORDER, headers=headers, json=payload)
+
+        with allure.step("Проверяем статус код и ответ"):
+            assert response.status_code == 200
+            assert MessageText.CREATE_ORDER in response.text
 
     @allure.title('Проверка создания заказа без авторизации')
     def test_create_order_without_authorization(self):
@@ -23,9 +28,13 @@ class TestCreateOder():
             "ingredients": [Ingredients.BUN, Ingredients.MEAT_PROTOSTOMIA, Ingredients.SPICY_SAUSE]
         }
         headers = {"Content-type": "application/json"}
-        response = requests.post(Const.CREATE_ORDER, headers=headers, json=payload)
-        assert response.status_code == 200
-        assert MessageText.CREATE_ORDER in response.text
+
+        with allure.step("Отправка POST-запроса без авторизации"):
+            response = requests.post(Const.CREATE_ORDER, headers=headers, json=payload)
+
+        with allure.step("Проверяем статус код и ответ"):
+            assert response.status_code == 200
+            assert MessageText.CREATE_ORDER in response.text
 
     @allure.title('Проверка создания заказа без указания ингредиентов')
     def test_create_order_without_ingredients(self):
@@ -33,9 +42,13 @@ class TestCreateOder():
             "ingredients": []
         }
         headers = {"Content-type": "application/json"}
-        response = requests.post(Const.CREATE_ORDER, headers=headers, json=payload)
-        assert response.status_code == 400
-        assert MessageText.CREATE_ORDER_WITHOUT_INGREDIENTS in response.text
+
+        with allure.step("Отправка POST-запроса без ингредиентов"):
+            response = requests.post(Const.CREATE_ORDER, headers=headers, json=payload)
+
+        with allure.step("Проверяем статус код и ответ"):
+            assert response.status_code == 400
+            assert MessageText.CREATE_ORDER_WITHOUT_INGREDIENTS in response.text
 
     @allure.title('Проверка создания заказа с указанием невалидного хеша ингредиента')
     def test_create_order_incorrect_ingredient(self):
@@ -43,6 +56,10 @@ class TestCreateOder():
             "ingredients": [Ingredients.BUN, Ingredients.MEAT_PROTOSTOMIA, Ingredients.INCORRECT_INGTEDIENTS]
         }
         headers = {"Content-type": "application/json"}
-        response = requests.post(Const.CREATE_ORDER, headers=headers, json=payload)
-        assert response.status_code == 500
-        assert MessageText.CREATE_ORDER_INCORRECT_INGTEDIENTS in response.text
+
+        with allure.step("Отправка POST-запроса с невалидным хешем ингредиента"):
+            response = requests.post(Const.CREATE_ORDER, headers=headers, json=payload)
+
+        with allure.step("Проверяем статус код и ответ"):
+            assert response.status_code == 500
+            assert MessageText.CREATE_ORDER_INCORRECT_INGTEDIENTS in response.text
